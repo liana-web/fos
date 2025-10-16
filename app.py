@@ -12,6 +12,14 @@ def index():
 def home():
     return render_template('home.html')
 
+@app.route('/register')
+def register():
+    return render_template('home.html')
+
+@app.route('/menu')
+def menu():
+    return render_template
+
 
 if __name__ == '__main__':
     app.run(debug=True)

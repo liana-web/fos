@@ -10,7 +10,11 @@ def index():
 
 @app.route('/home')
 def home():
-    return render_template('home.html')
+    
+    user = session.get('username')  # Try to get username from session
+    if not user:
+        user = "Guest"  # Default if no user is found
+    return render_template('home.html', user=user)
 
 @app.route('/register')
 def register():

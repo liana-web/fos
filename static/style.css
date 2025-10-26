@@ -5,7 +5,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh; 
-    background-image: url('img/background.jpg'); 
+    background-image: url('../static/img/background.jpg'); 
     background-size: cover; 
     background-position: center; 
     background-repeat: no-repeat; 
@@ -243,4 +243,240 @@ p {
     font-size: 1.2em;
     font-weight: bold;
     color: #333;
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body Layout */
+body {
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  color: #333;
+  width: 100%;
+}
+
+/* Ensure full width for sections */
+header, main, footer {
+  width: 100%;
+}
+
+/* ============================
+   NAVBAR (Fixed on Top)
+============================ */
+.navbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 80px;
+  background: #0f0006;
+  box-shadow: 0 2px 8px rgba(253, 249, 249, 0.05);
+  position: fixed;            /* fixed navbar */
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+/* add space so content isn’t hidden behind navbar */
+body::before {
+  content: "";
+  display: block;
+  height: 90px; /* height of navbar */
+}
+
+.logo {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #0c8b55;
+}
+
+/* Nav links */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #fcfafa;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+/* Active & hover link underline animation */
+.nav-links a.active,
+.nav-links a:hover {
+  color: #0c8b55;
+}
+
+.nav-links a.active::after,
+.nav-links a:hover::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 100%;
+  height: 2px;
+  background: #0c8b55;
+  border-radius: 2px;
+}
+
+/* Navbar icons */
+.nav-icons a {
+  color: #ebe8e8;
+  margin-left: 15px;
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+}
+
+.nav-icons a:hover {
+  color: #0c8b55;
+}
+
+/* ============================
+   ABOUT SECTION
+============================ */
+.about {
+  padding: 80px 100px;
+  background-color: #fff;
+}
+
+.about-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+
+.about-image img {
+  width: 480px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.about-content {
+  max-width: 550px;
+}
+
+.about-content h3 {
+  color: #0c8b55;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.about-content h2 {
+  font-size: 1.4rem;
+  color: #333;
+}
+
+.about-content h1 {
+  margin: 10px 0 15px;
+  font-size: 2rem;
+  color: #111;
+}
+
+.about-content p {
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.about-buttons {
+  display: flex;
+  gap: 15px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.btn {
+  background: #eef7f1;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  color: #0c8b55;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.learn-btn {
+  background: #0c8b55;
+  color: #fff;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.learn-btn:hover {
+  background: #096b44;
+}
+
+/* ============================
+   FOOTER
+============================ */
+footer {
+  background-color: #111;
+  color: #fff;
+  text-align: center;
+  padding: 25px 10px;
+  margin-top: 60px;
+}
+
+.footer-container p {
+  margin: 6px 0;
+}
+
+.footer-container a {
+  color: #0c8b55;
+  text-decoration: none;
+  margin: 0 5px;
+  font-weight: 500;
+}
+
+.footer-container a:hover {
+  text-decoration: underline;
+}
+
+/* ============================
+   RESPONSIVE
+============================ */
+@media (max-width: 992px) {
+  .navbar {
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px 20px;
+  }
+
+  .about-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .about-image img {
+    width: 90%;
+  }
+
+  .about-content {
+    max-width: 100%;
+  }
+
+  body::before {
+    height: 130px; /* add more space for stacked navbar on small screens */
+  }
 }

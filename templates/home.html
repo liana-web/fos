@@ -97,7 +97,12 @@
 <body>
 
   <nav class="navbar">
-    <div class="logo">🍴</div>
+    <div class="logo">🍴Foodilicious Welcome, <span id="username">Guest</span></div>
+<script>
+  const user = null;
+  document.getElementById("username").textContent = user || "Guest";
+</script>
+
     <ul>
       <li><a href="#" class="active">Home</a></li>
       <li><a href="#">Menu</a></li>

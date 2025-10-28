@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Add Order</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .navbar-brand {
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .card:hover { transform: scale(1.03); transition: 0.2s; }
+    #newCustomerFields { display: none; }
+  </style>
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<div class="container">
+    <a class="navbar-brand">FOOD ORDERING SYSTEM</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+        <a class="nav-link {% if request.endpoint == 'add_order' %}active{% endif %}" href="{{ url_for('add_order') }}">
+            <i class="bi bi-cart-plus"></i> Create New Order
+        </a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link {% if request.endpoint == 'view_orders' %}active{% endif %}" href="{{ url_for('view_orders') }}">
+            <i class="bi bi-list-ul"></i> Order List
+        </a>
+        </li>
+    </ul>
+    </div>
+</div>
+</nav>
+<div class="container py-4">
+  <h2 class="mb-4">Create New Order</h2>
+  <form method="POST" class="p-4 bg-white rounded shadow-sm">
+    <div class="mb-3">
+        <label class="form-label">Order Date</label>
+        <div class="input-group" onclick="document.getElementById('order_date').showPicker()">
+            <input type="date" id="order_date" name="order_date" class="form-control" required>
+            <span class="input-group-text bg-light" style="cursor:pointer;">📅</span>
+        </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="order_status" class="form-label">Order Status</label>
+      <select name="order_status" id="order_status" class="form-select">
+        <option value="Pending">Pending</option>
+        <option value="Completed">Completed</option>
+        <option value="Cancelled">Cancelled</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="customer_id" class="form-label">Customer <span class="text-danger">*</span></label>
+        <select id="customer_id" name="customer_id" class="form-select" onchange="toggleNewCustomer()" required>
+            <option value="" disabled selected>-- Select Existing Customer --</option>
+            {% for customer in customers %}
+            <option value="{{ customer[0] }}">{{ customer[1] }} ({{ customer[2] }})</option>
+            {% endfor %}
+            <option value="new">➕ Add New Customer</option>
+        </select>
+        </div>
+
+        <div id="newCustomerFields" class="border rounded p-3 bg-light" style="display: none;">
+        <div class="mb-3">
+            <label class="form-label">New Customer Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="new_name" placeholder="Enter name">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">New Customer Email <span class="text-danger">*</span></label>
+            <input type="email" class="form-control" name="new_email" placeholder="Enter email">
+        </div>
+    </div>
+
+    <h5 class="mt-4">Select Products</h5>
+    <div class="row">
+      {% for product in products %}
+      <div class="col-md-3 mb-3">
+        <div class="card h-100 shadow-sm">
+          <img src="{{ url_for('static', filename='img/' + product[3]) }}" class="card-img-top rounded" alt="{{ product[1] }}">
+          <div class="card-body">
+            <h6 class="card-title">{{ product[1] }}</h6>
+            <p class="card-text mb-1">₱{{ "%.2f"|format(product[2]) }}</p>
+            <div class="input-group">
+              <input type="hidden" name="product_id" value="{{ product[0] }}">
+              <input type="number" name="quantity" min="0" value="0" class="form-control" placeholder="Qty">
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="text-end">
+      <button type="submit" class="btn btn-primary mt-3">Submit Order</button>
+    </div>
+  </form>
+</div>
+
+<script>
+function toggleNewCustomer() {
+  const select = document.getElementById('customer_id');
+  const newFields = document.getElementById('newCustomerFields');
+  const nameInput = document.querySelector('input[name="new_name"]');
+  const emailInput = document.querySelector('input[name="new_email"]');
+
+  if (select.value === 'new') {
+    // Show new customer form
+    newFields.style.display = 'block';
+    // Make new customer fields required
+    nameInput.required = true;
+    emailInput.required = true;
+    // Remove dropdown required (to avoid validation conflict)
+    select.required = false;
+  } else {
+    // Hide new customer form
+    newFields.style.display = 'none';
+    // Remove required from new customer inputs
+    nameInput.required = false;
+    emailInput.required = false;
+    // Add dropdown required back
+    select.required = true;
+  }
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

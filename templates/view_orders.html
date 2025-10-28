@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Orders List</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .card { border-radius: 12px; }
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 0.9em;
+        }
+        .status-Pending { background: #fff3cd; color: #856404; }
+        .status-Completed { background: #d4edda; color: #155724; }
+        .status-Cancelled { background: #f8d7da; color: #721c24; }
+        .navbar-brand {
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .card:hover { transform: scale(1.03); transition: 0.2s; }
+        #newCustomerFields { display: none; }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand">FOOD ORDERING SYSTEM</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'add_order' %}active{% endif %}" href="{{ url_for('add_order') }}">
+                <i class="bi bi-cart-plus"></i> Create New Order
+            </a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'view_orders' %}active{% endif %}" href="{{ url_for('view_orders') }}">
+                <i class="bi bi-list-ul"></i> Order List
+            </a>
+            </li>
+        </ul>
+        </div>
+    </div>
+</nav>
+<div class="container mt-5 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Orders List</h2>
+        <a href="{{ url_for('add_order') }}" class="btn btn-primary">+ Add New Order</a>
+    </div>
+
+    {% if orders %}
+        {% for order in orders %}
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5>Order #{{ order['id'] }}</h5>
+                        <p class="mb-1"><strong>Customer:</strong> {{ order['name'] }} ({{ order['email'] }})</p>
+                        <p class="mb-1"><strong>Date:</strong> {{ order['date'] }}</p>
+                        <p><span class="status-badge status-{{ order['status'] }}">{{ order['status'] }}</span></p>
+                    </div>
+                    <div class="text-end">
+                        <h5 class="text-success">₱{{ "%.2f"|format(order.total) }}</h5>
+                    </div>
+                </div>
+
+                <hr>
+                <table class="table table-sm align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Price (₱)</th>
+                            <th>Subtotal (₱)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order['items'] %}
+                        <tr>
+                            <td>{{ item[0] }}</td>
+                            <td>{{ item[1] }}</td>
+                            <td>{{ "%.2f"|format(item[2]) }}</td>
+                            <td>{{ "%.2f"|format(item[1] * item[2]) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info text-center">No orders found.</div>
+    {% endif %}
+</div>
+
+</body>
+</html>

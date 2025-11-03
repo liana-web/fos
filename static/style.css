@@ -142,108 +142,165 @@ p {
 }
 
 
-/* --- Menu Grid Styles --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #333;
+  width: 100%;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 15px 8%;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.logo {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #4CAF50;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: #4CAF50;
+}
+
+/* ✅ Fixed Grid */
 .menu-grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
-    padding: 30px 5%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  padding: 40px 8%;
+  width: 100%;
+  justify-items: center;
 }
 
 .menu-item {
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  width: 100%;
+  max-width: 300px;
+  transition: transform 0.2s;
+}
+
+.menu-item:hover {
+  transform: translateY(-5px);
 }
 
 .item-header {
-    position: relative;
-    line-height: 0;
+  position: relative;
+  line-height: 0;
 }
 
 .menu-item img {
-    width: 100%;
-    height: 200px;
-    display: block;
-    object-fit: cover;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
 }
 
 .favorite-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: rgba(255, 255, 255, 0.85);
-    border: none;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    cursor: pointer;
-    font-size: 1.1em;
-    color: #333;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(255, 255, 255, 0.85);
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  font-size: 1.1em;
+  color: #333;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .item-body {
-    padding: 15px;
+  padding: 15px;
 }
 
 .rating {
-    color: orange;
-    margin-bottom: 5px;
-    font-size: 0.9em;
+  color: orange;
+  margin-bottom: 5px;
+  font-size: 0.9em;
 }
 
 .rating.green-stars {
-    color: #4CAF50;
+  color: #4CAF50;
 }
 
 .item-body h3 {
-    font-size: 1.3em;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 5px;
+  font-size: 1.3em;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
 }
 
 .description {
-    font-size: 0.85em;
-    color: #777;
-    margin-bottom: 15px;
-    line-height: 1.4;
-    height: 40px;
-    overflow: hidden;
+  font-size: 0.85em;
+  color: #777;
+  margin-bottom: 15px;
+  line-height: 1.4;
+  height: 40px;
+  overflow: hidden;
 }
 
-
 .item-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 10px;
-    border-top: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
 }
 
 .add-to-cart {
-    background-color: #ffffff;
-    color: #4CAF50;
-    border: 1px solid #4CAF50;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.2s, color 0.2s;
+  background-color: #ffffff;
+  color: #4CAF50;
+  border: 1px solid #4CAF50;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .add-to-cart:hover {
-    background-color: #4CAF50;
-    color: #ffffff;
+  background-color: #4CAF50;
+  color: #ffffff;
 }
 
 .price {
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #333;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #333;
 }
+
 
 /* Reset */
 * {

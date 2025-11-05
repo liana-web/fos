@@ -1,201 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu</title>
 
-    <link rel="stylesheet" href="../static/style.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <!-- ✅ Proper Font Awesome (full icons load correctly) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
 
 <header>
-    <nav class="navbar">
-        <div class="logo">🍴Foodilicious</div>
-        <ul class="nav-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#" class="active">Menu</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Review</a></li>
-            <li><a href="#">Order</a></li>
-        </ul>
-        <div class="nav-icons">
-            <i class="fas fa-search"></i>
-            <i class="fas fa-shopping-cart"></i>
-        </div>
-    </nav>
+  <nav class="navbar">
+    <div class="logo">🍴Foodilicious</div>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#" class="active">Menu</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Review</a></li>
+      <li><a href="#">Order</a></li>
+    </ul>
+    <div class="nav-icons">
+      <i class="fas fa-search"></i>
+      <i class="fas fa-shopping-cart"></i>
+    </div>
+  </nav>
 </header>
 
 <div class="menu-grid-container">
 
-    <div class="menu-item">
-        <div class="item-header">
-            <img src="../static/img/sisig.jpg" alt="Sizzling Sisig">
-            <button class="favorite-btn"><i class="far fa-heart"></i></button>
-        </div>
-        <div class="item-body">
-            <div class="rating green-stars">
-                <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-            </div>
-            <h3>Sizzling Sisig</h3>
-            <p class="description">Chopped pork cheek, onions, chili, and calamansi, served on a sizzling platter with a raw egg. (Serves 2-3)</p>
-            <div class="item-footer">
-                <button class="add-to-cart">Add To Cart</button>
-                <span class="price">₱350</span>
-            </div>
-        </div>
+  <div class="menu-item">
+    <div class="item-header">
+      <img src="../static/img/sisig.jpg" alt="Sizzling Sisig">
+      <button class="favorite-btn"><i class="fa-regular fa-heart"></i></button>
     </div>
-
-    <div class="menu-item">
-        <div class="item-header">
-            <img src="../static/img/home.jpg" alt="Bulalo">
-            <button class="favorite-btn"><i class="far fa-heart"></i></button>
-        </div>
-        <div class="item-body">
-            <div class="rating">
-                <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                <i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                <i class="far fa-star"></i>
-            </div>
-            <h3>Bulalo (Beef Shank Soup)</h3>
-            <p class="description">Tender beef shanks and bone marrow slow-cooked into a rich broth with corn and vegetables. (Serves 3-4)</p>
-            <div class="item-footer">
-                <button class="add-to-cart">Add To Cart</button>
-                <span class="price">₱550</span>
-            </div>
-        </div>
+    <div class="item-body">
+      <div class="rating green-stars">
+        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+      </div>
+      <h3>Sizzling Sisig</h3>
+      <p class="description">
+        Chopped pork cheek, onions, chili, and calamansi, served on a sizzling platter with a raw egg. (Serves 2–3)
+      </p>
+      <div class="item-footer">
+        <button class="add-to-cart">Add To Cart</button>
+        <span class="price">₱350</span>
+      </div>
     </div>
+  </div>
 
-    <div class="menu-item">
-        <div class="item-header">
-            <img src="../static/img/chicken.jpg" alt="Chicken Adobo">
-            <button class="favorite-btn"><i class="far fa-heart"></i></button>
-        </div>
-        <div class="item-body">
-            <div class="rating">
-                <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-            </div>
-            <h3>Classic Chicken Adobo</h3>
-            <p class="description">Chicken braised in soy sauce, vinegar, crushed garlic, bay leaves, and peppercorns. (Serves 2-3)</p>
-            <div class="item-footer">
-                <button class="add-to-cart">Add To Cart</button>
-                <span class="price">₱320</span>
-            </div>
-        </div>
+  <div class="menu-item">
+    <div class="item-header">
+      <img src="../static/img/home.jpg" alt="Bulalo">
+      <button class="favorite-btn"><i class="fa-regular fa-heart"></i></button>
     </div>
-
-</div>
-
-<div class="menu-item">
-        <div class="item-header">
-            <img src="../static/img/pata.jpg" alt="Crispy Pata">
-            <button class="favorite-btn"><i class="far fa-heart"></i></button>
-        </div>
-        <div class="item-body">
-            <div class="rating">
-                <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-            </div>
-            <h3>Crispy Pata (Pork Knuckle)</h3>
-            <p class="description">Deep-fried pork knuckle, boiled until tender then fried to achieve maximum crispness. (Serves 4-5)</p>
-            <div class="item-footer">
-                <button class="add-to-cart">Add To Cart</button>
-                <span class="price">₱780</span>
-            </div>
-        </div>
+    <div class="item-body">
+      <div class="rating">
+        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        <i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+        <i class="far fa-star"></i>
+      </div>
+      <h3>Bulalo (Beef Shank Soup)</h3>
+      <p class="description">
+        Tender beef shanks and bone marrow slow-cooked into a rich broth with corn and vegetables. (Serves 3–4)
+      </p>
+      <div class="item-footer">
+        <button class="add-to-cart">Add To Cart</button>
+        <span class="price">₱550</span>
+      </div>
     </div>
+  </div>
 
-    <div class="menu-item">
-        <div class="item-header">
-            <img src="../static/img/bbq.jpg" alt="Pork BBQ Skewers">
-            <button class="favorite-btn"><i class="far fa-heart"></i></button>
-        </div>
-        <div class="item-body">
-            <div class="rating">
-                <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-            </div>
-            <h3>Pork BBQ Skewers</h3>
-            <p class="description">Sweet, savory, and tender pork slices marinated and grilled over charcoal. (Price is per stick)</p>
-            <div class="item-footer">
-                <button class="add-to-cart">Add To Cart</button>
-                <span class="price">₱80</span>
-            </div>
-        </div>
+  <div class="menu-item">
+    <div class="item-header">
+      <img src="../static/img/chicken.jpg" alt="Chicken Adobo">
+      <button class="favorite-btn"><i class="fa-regular fa-heart"></i></button>
     </div>
-     <div class="menu-item">
-            <div class="item-header">
-                <img src="../static/img/karekare.jpg" alt="Kare-Kare">
-                <div class="favorite-btn"><i class="far fa-heart"></i></button>
-            </div>
-            <div class="item-body">
-                <div class="rating">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="far fa-star"></i>
-                </div>
-                <h3>Kare-Kare (Peanut Stew)</h3>
-                <p class="description">
-                    Oxtail and tripe stewed in a thick, savory peanut-based sauce. Served with bagoong. (Serves 3-4)
-                </p>
-                <div class="item-footer">
-                    <button class="add-to-cart">Add To Cart</button>
-                    <span class="price">₱520</span>
-                </div>
-            </div>
-        </div>
+    <div class="item-body">
+      <div class="rating">
+        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+      </div>
+      <h3>Classic Chicken Adobo</h3>
+      <p class="description">
+        Chicken braised in soy sauce, vinegar, crushed garlic, bay leaves, and peppercorns. (Serves 2–3)
+      </p>
+      <div class="item-footer">
+        <button class="add-to-cart">Add To Cart</button>
+        <span class="price">₱320</span>
+      </div>
+    </div>
+  </div>
 
-    <div class="menu-item">
-        <div class="item-header">
-            <img src="../static/img/baboy.jpg" alt="Tokwa't Baboy">
-            <button class="favorite-btn"><i class="far fa-heart"></i></button>
-        </div>
-        <div class="item-body">
-            <div class="rating green-stars">
-                <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-            </div>
-            <h3>Tokwa't Baboy</h3>
-            <p class="description">Crispy Lechon Kawali and deep-fried tofu in a tangy soy-vinegar dressing with onions and chili. (Serves 2-3)</p>
-            <div class="item-footer">
-                <button class="add-to-cart">Add To Cart</button>
-                <span class="price">₱350</span>
-            </div>
-        </div>
+  <div class="menu-item">
+    <div class="item-header">
+      <img src="../static/img/pata.jpg" alt="Crispy Pata">
+      <button class="favorite-btn"><i class="fa-regular fa-heart"></i></button>
     </div>
+    <div class="item-body">
+      <div class="rating">
+        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+      </div>
+      <h3>Crispy Pata (Pork Knuckle)</h3>
+      <p class="description">
+        Deep-fried pork knuckle, boiled until tender then fried to achieve maximum crispness. (Serves 4–5)
+      </p>
+      <div class="item-footer">
+        <button class="add-to-cart">Add To Cart</button>
+        <span class="price">₱780</span>
+      </div>
+    </div>
+  </div>
 
-    
-    <div class="menu-item">
-        <div class="item-header">
-            <img src="../static/img/adobo.jpg" alt="Pork Adobo">
-            <button class="favorite-btn"><i class="far fa-heart"></i></button>
-        </div>
-        <div class="item-body">
-            <div class="rating green-stars">
-                <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-            </div>
-            <h3>Pork Adobo</h3>
-            <p class="description">Pork belly slowly simmered in soy sauce, vinegar, garlic, and black peppercorns until tender. (Serves 2-3)</p>
-            <div class="item-footer">
-                <button class="add-to-cart">Add To Cart</button>
-                <span class="price">₱350</span>
-            </div>
-        </div>
+  <div class="menu-item">
+    <div class="item-header">
+      <img src="../static/img/bbq.jpg" alt="Pork BBQ Skewers">
+      <button class="favorite-btn"><i class="fa-regular fa-heart"></i></button>
     </div>
+    <div class="item-body">
+      <div class="rating">
+        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+      </div>
+      <h3>Pork BBQ Skewers</h3>
+      <p class="description">
+        Sweet, savory, and tender pork slices marinated and grilled over charcoal. (Price is per stick)
+      </p>
+      <div class="item-footer">
+        <button class="add-to-cart">Add To Cart</button>
+        <span class="price">₱80</span>
+      </div>
     </div>
+  </div>
 
+  <div class="menu-item">
+    <div class="item-header">
+      <img src="../static/img/karekare.jpg" alt="Kare-Kare">
+      <button class="favorite-btn"><i class="fa-regular fa-heart"></i></button>
+    </div>
+    <div class="item-body">
+      <div class="rating">
+        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        <i class="far fa-star"></i>
+      </div>
+      <h3>Kare-Kare (Peanut Stew)</h3>
+      <p class="description">
+        Oxtail and tripe stewed in a thick, savory peanut-based sauce. Served with bagoong. (Serves 3–4)
+      </p>
+      <div class="item-footer">
+        <button class="add-to-cart">Add To Cart</button>
+        <span class="price">₱520</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-item">
+    <div class="item-header">
+      <img src="../static/img/baboy.jpg" alt="Tokwa't Baboy">
+      <button class="favorite-btn"><i class="fa-regular fa-heart"></i></button>
+    </div>
+    <div class="item-body">
+      <div class="rating green-stars">
+        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+      </div>
+      <h3>Tokwa't Baboy</h3>
+      <p class="description">
+        Crispy Lechon Kawali and deep-fried tofu in a tangy soy-vinegar dressing with onions and chili. (Serves 2–3)
+      </p>
+      <div class="item-footer">
+        <button class="add-to-cart">Add To Cart</button>
+        <span class="price">₱350</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-item">
+    <div class="item-header">
+      <img src="../static/img/adobo.jpg" alt="Pork Adobo">
+      <button class="favorite-btn"><i class="fa-regular fa-heart"></i></button>
+    </div>
+    <div class="item-body">
+      <div class="rating green-stars">
+        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+      </div>
+      <h3>Pork Adobo</h3>
+      <p class="description">
+        Pork belly slowly simmered in soy sauce, vinegar, garlic, and black peppercorns until tender. (Serves 2–3)
+      </p>
+      <div class="item-footer">
+        <button class="add-to-cart">Add To Cart</button>
+        <span class="price">₱350</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- END menu-grid-container -->
+
+
+<!-- ✅ HEART TOGGLE SCRIPT (Put before closing body tag) -->
+<script>
+  document.querySelectorAll('.favorite-btn').forEach(button => {
+    button.addEventListener('click', () => {
+
+      // Toggle active class (red color)
+      button.classList.toggle('active');
+
+      // Toggle between outline and solid heart
+      const icon = button.querySelector('i');
+      icon.classList.toggle('fa-regular');
+      icon.classList.toggle('fa-solid');
+    });
+  });
+</script>
 
 </body>
 </html>

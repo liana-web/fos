@@ -195,6 +195,7 @@ body {
 .menu-grid-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, auto);
   gap: 25px;
   padding: 40px 8%;
   width: 100%;
@@ -230,16 +231,31 @@ body {
   position: absolute;
   top: 10px;
   right: 10px;
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: rgba(252, 250, 250, 0.85);
   border: none;
   border-radius: 50%;
   width: 35px;
   height: 35px;
   cursor: pointer;
-  font-size: 1.1em;
-  color: #333;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+
+.favorite-btn i {
+  font-size: 1.3em;
+  color: #333;
+  transition: color .3s ease, transform .2s ease;
+}
+
+/* When clicked (filled heart) */
+.favorite-btn.active i {
+  color: #e60023;
+  transform: scale(1.15);
+}
+
+
 
 .item-body {
   padding: 15px;
@@ -252,7 +268,7 @@ body {
 }
 
 .rating.green-stars {
-  color: #4CAF50;
+  color: orange;
 }
 
 .item-body h3 {

@@ -31,6 +31,30 @@
 
 <div class="menu-grid-container">
 
+  {% for product in products %}
+    <div class="menu-item">
+      <div class="item-header">
+        <img src="{{ url_for('static', filename='img/' + product[4]) }}" alt="{{ product[1] }}">
+        <button class="favorite-btn"><i class="fa-regular fa-heart"></i></button>
+      </div>
+      <div class="item-body">
+        <div class="rating green-stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+        </div>
+        <h3>{{ product[1] }}</h3>
+        <p class="description">
+          {{ product[2] }}
+        </p>
+        <div class="item-footer">
+          <button class="add-to-cart">Add To Cart</button>
+          <span class="price">₱{{ "%.2f"|format(product[3]) }}</span>
+        </div>
+      </div>
+    </div> 
+  {% endfor %}
+  <!--
   <div class="menu-item">
     <div class="item-header">
       <img src="../static/img/sisig.jpg" alt="Sizzling Sisig">
@@ -206,7 +230,7 @@
       </div>
     </div>
   </div>
-
+  -->
 </div><!-- END menu-grid-container -->
 
 

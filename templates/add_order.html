@@ -16,6 +16,8 @@
     .card:hover { transform: scale(1.03); transition: 0.2s; }
     #newCustomerFields { display: none; }
   </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../static/style.css">
 </head>
 <body class="bg-light">
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -37,6 +39,19 @@
             <i class="bi bi-list-ul"></i> Order List
         </a>
         </li>
+        {% if session.get('user_id') %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}">
+              <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('login') }}">
+              <i class="bi bi-box-arrow-in-right"></i> Login
+            </a>
+          </li>
+        {% endif %}
     </ul>
     </div>
 </div>
@@ -84,14 +99,46 @@
     </div>
 
     <h5 class="mt-4">Select Products</h5>
+
+    <div class="menu-grid-container">
+
+      {% for product in products %}
+        <div class="menu-item">
+          <div class="item-header">
+            <img src="{{ url_for('static', filename='img/' + product[4]) }}" alt="{{ product[1] }}">
+            <button class="favorite-btn"><i class="fa-regular fa-heart"></i></button>
+          </div>
+          <div class="item-body">
+            <div class="rating green-stars">
+              <i class="fas fa-star"></i><i class="fas fa-star"></i>
+              <i class="fas fa-star"></i><i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <h3>{{ product[1] }}</h3>
+            <p class="description">
+              {{ product[2] }}
+            </p>            
+            <div class="item-footer">
+              <span class="price">₱{{ "%.2f"|format(product[3]) }}</span>
+            </div>
+            <div class="input-group">
+              <input type="hidden" name="product_id" value="{{ product[0] }}">
+              <input type="number" name="quantity" min="0" value="0" class="form-control" placeholder="Qty">
+            </div>
+          </div>
+        </div> 
+      {% endfor %}
+
+    </div>
+    <!--
     <div class="row">
       {% for product in products %}
       <div class="col-md-3 mb-3">
         <div class="card h-100 shadow-sm">
-          <img src="{{ url_for('static', filename='img/' + product[3]) }}" class="card-img-top rounded" alt="{{ product[1] }}">
+          <img src="{{ url_for('static', filename='img/' + product[4]) }}" class="card-img-top rounded" alt="{{ product[1] }}">
           <div class="card-body">
             <h6 class="card-title">{{ product[1] }}</h6>
-            <p class="card-text mb-1">₱{{ "%.2f"|format(product[2]) }}</p>
+            <p class="card-text mb-1">₱{{ "%.2f"|format(product[3]) }}</p>
             <div class="input-group">
               <input type="hidden" name="product_id" value="{{ product[0] }}">
               <input type="number" name="quantity" min="0" value="0" class="form-control" placeholder="Qty">
@@ -101,10 +148,11 @@
       </div>
       {% endfor %}
     </div>
+    -->
 
-    <div class="text-end">
+    <center>
       <button type="submit" class="btn btn-primary mt-3">Submit Order</button>
-    </div>
+    </center>
   </form>
 </div>
 

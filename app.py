@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_scss import Scss
 from flask_sqlalchemy import SQLAlchemy
 import sqlite3
@@ -10,6 +10,17 @@ DB_NAME = 'fos.db'
 def init_db():
     with sqlite3.connect(DB_NAME) as conn:
         c = conn.cursor()
+
+        # Users table
+        c.execute('''
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT NOT NULL,
+                password TEXT NOT NULL,
+                email TEXT NOT NULL,
+                role INTEGER NOT NULL
+            )
+        ''')
 
         # Customers table
         c.execute('''
@@ -25,6 +36,7 @@ def init_db():
             CREATE TABLE IF NOT EXISTS products (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
+                description TEXT NOT NULL,
                 price REAL NOT NULL,
                 image_url TEXT
             )
@@ -57,13 +69,28 @@ def init_db():
         c.execute('SELECT COUNT(*) FROM products')
         if c.fetchone()[0] == 0:
             c.executemany('''
-                INSERT INTO products (name, price, image_url)
-                VALUES (?, ?, ?)
+                INSERT INTO products (name, description, price, image_url)
+                VALUES (?, ?, ?, ?)
             ''', [
-                ('Crispy Pata', 850.00, 'pata.jpg'),
-                ('Adobo', 350.00, 'adobo.jpg'),
-                ('Kare-kare', 299.00, 'karekare.jpg'),
-                ('Sisig', 180.00, 'sisig.jpg')
+                ('Crispy Pata', 'Deep-fried pork knuckle, boiled until tender then fried to achieve maximum crispness.', 850.00, 'pata.jpg'),
+                ('Adobo', 'Pork braised in soy sauce, vinegar, crushed garlic, bay leaves, and peppercorns. (Serves 2–3)', 350.00, 'adobo.jpg'),
+                ('Tokwa\'t Baboy', 'Crispy Lechon Kawali and deep-fried tofu in a tangy soy-vinegar dressing with onions and chili. (Serves 2–3)', 350.00, 'baboy.jpg'),
+                ('Kare-kare', 'Oxtail and tripe stewed in a thick, savory peanut-based sauce. Served with bagoong. (Serves 3–4)', 299.00, 'karekare.jpg'),
+                ('Sisig', 'Chopped pork cheek, onions, chili, and calamansi, served on a sizzling platter with a raw egg. (Serves 2–3)', 180.00, 'sisig.jpg'),
+                ('Pork BBQ Skewers', 'Sweet, savory, and tender pork slices marinated and grilled over charcoal. (Price is per stick)', 80.00, 'bbq.jpg'),
+                ('Bulalo (Beef Shank Soup)', 'Sweet, savory, and tender pork slices marinated and grilled over charcoal. (Price is per stick)', 550.00, 'bulalo.jpg')
+            ])
+
+        # Seed users if empty
+        c.execute('SELECT COUNT(*) FROM users')
+        if c.fetchone()[0] == 0:
+            c.executemany('''
+                INSERT INTO users (username, password, email, role)
+                VALUES (?, ?, ?, ?)
+            ''', [
+                ('admin', 'adminpass', 'admin@example.com', 1),
+                ('customer1', 'cust1pass', 'cust1@example.com', 2),
+                ('customer2', 'cust2pass', 'cust2@example.com', 2)
             ])
             conn.commit()
 
@@ -77,6 +104,35 @@ def get_products():
 @app.route("/")
 def index():
     return render_template('index.html')
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
+        conn = sqlite3.connect(DB_NAME)
+        c = conn.cursor()
+        c.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
+        user = c.fetchone()
+        conn.close()
+
+        if user:
+            session["user_id"] = user[0]
+            session["username"] = user[1]
+            flash("Login successful!", "success")
+            return redirect(url_for("add_order"))
+        else:
+            flash("Invalid username or password", "danger")
+
+    return render_template("index.html")
+
+@app.route("/logout")
+def logout():
+    # Clear all session data
+    session.clear()
+    flash("You’ve been logged out.", "info")
+    return redirect(url_for("login"))
 
 @app.route('/home')
 def home():
@@ -202,8 +258,17 @@ def add_order():
 
 @app.route('/menu')
 def menu():
-    return render_template('menu.html')
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+
+    # Fetch products and customers
+    c.execute("SELECT * FROM products")
+    products = c.fetchall()
     
+    conn.commit()
+    conn.close()
+    return render_template('menu.html', products=products)
+
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)

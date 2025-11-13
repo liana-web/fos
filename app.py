@@ -15,21 +15,11 @@ def init_db():
         c.execute('''
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username TEXT NOT NULL,
+                username TEXT UNIQUE NOT NULL,
                 password TEXT NOT NULL,
+                full_name TEXT NOT NULL,
                 email TEXT NOT NULL,
-                role INTEGER NOT NULL
-            )
-        ''')
-
-        # Customers table
-        c.execute('''
-            CREATE TABLE IF NOT EXISTS customers (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                email TEXT NOT NULL
-            )
-        ''')
+                role INTEGER DEFAULT 2)''')  # 1 = admin, 2 = customer
 
         # Create Products table
         c.execute('''
@@ -46,10 +36,10 @@ def init_db():
         c.execute('''
             CREATE TABLE IF NOT EXISTS orders (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                customer_id INTEGER NOT NULL,
+                user_id INTEGER NOT NULL,
                 order_date TEXT NOT NULL,
                 order_status TEXT NOT NULL,
-                FOREIGN KEY (customer_id) REFERENCES customers (id)
+                FOREIGN KEY (user_id) REFERENCES users (id)
             )
         ''')
 
@@ -85,12 +75,12 @@ def init_db():
         c.execute('SELECT COUNT(*) FROM users')
         if c.fetchone()[0] == 0:
             c.executemany('''
-                INSERT INTO users (username, password, email, role)
-                VALUES (?, ?, ?, ?)
+                INSERT INTO users (username, password, email, full_name, role)
+                VALUES (?, ?, ?, ?, ?)
             ''', [
-                ('admin', 'adminpass', 'admin@example.com', 1),
-                ('customer1', 'cust1pass', 'cust1@example.com', 2),
-                ('customer2', 'cust2pass', 'cust2@example.com', 2)
+                ('admin', 'adminpass', 'admin@test.com', 'Admin User', 1),
+                ('customer1', 'cust1pass', 'juliana@test.com', 'Juliana Ritz', 2),
+                ('customer2', 'cust2pass', 'julianne@test.com', 'Julianne Curtis', 2)
             ])
             conn.commit()
 
@@ -120,6 +110,7 @@ def login():
         if user:
             session["user_id"] = user[0]
             session["username"] = user[1]
+            session["role"] = user[5]
             flash("Login successful!", "success")
             return redirect(url_for("add_order"))
         else:
@@ -145,6 +136,38 @@ def home():
 @app.route('/register')
 def register():
     return render_template('home.html')
+
+@app.route("/register_customer", methods=["GET", "POST"])
+def register_customer():
+    if request.method == "POST":
+        full_name = request.form["full_name"]
+        username = request.form["username"]
+        email = request.form["email"]
+        password = request.form["password"]
+
+        if not full_name or not username or not password:
+            flash("All fields are required!", "warning")
+            return redirect(url_for("register_customer"))
+
+        conn = sqlite3.connect(DB_NAME)
+        c = conn.cursor()
+
+        try:
+            c.execute(
+                "INSERT INTO users (username, password, email, full_name, role) VALUES (?, ?, ?, ?, ?)",
+                (username, password, email, full_name, 2)
+            )
+            conn.commit()
+            flash("Customer registered successfully!", "success")
+        except sqlite3.IntegrityError:
+            flash("Username already exists. Please choose another.", "danger")
+        finally:
+            conn.close()
+
+        return redirect(url_for("register_customer"))
+
+    return render_template("register_customer.html")
+
 
 @app.route('/add_customer', methods=['GET', 'POST'])
 def add_customer():
@@ -174,9 +197,10 @@ def view_orders():
         c.execute('''
             SELECT 
                 o.id, o.order_date, o.order_status,
-                c.name, c.email
+                u.name, u.email
             FROM orders o
-            JOIN customers c ON o.customer_id = c.id
+            JOIN users u ON o.user_id = u.id
+            WHERE u.role = 2
             ORDER BY o.id DESC
         ''')
         orders = c.fetchall()
@@ -215,7 +239,7 @@ def add_order():
     c.execute("SELECT * FROM products")
     products = c.fetchall()
 
-    c.execute("SELECT * FROM customers")
+    c.execute("SELECT * FROM users WHERE role=2")
     customers = c.fetchall()
 
     if request.method == "POST":

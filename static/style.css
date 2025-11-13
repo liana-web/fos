@@ -479,7 +479,7 @@ body::before {
   border-radius: 8px;
   font-size: 0.9em;
   color: #0c8b55;
-  display: flex;
+  display: block;
   align-items: center;
   gap: 8px;
   font-weight: 500;

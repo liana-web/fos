@@ -26,6 +26,21 @@ body {
     color: #f0f0f0; 
 }
 
+.table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card {
+    background-color: rgba(131, 126, 126, 0.5);
+    padding: 20px;
+    color: white;
+    border-radius: 10px;
+}
+
 h2 {
     margin-bottom: 30px;
     font-size: 2em;
@@ -41,8 +56,10 @@ h2 {
     width: calc(100% - 20px);
     padding: 15px 10px;
     border: none;
-    background: rgba(255, 255, 255, 0.87);
+    background: rgba(107, 95, 95, 0.238);
     border-radius: 10px;
+    border-top-left-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
     color: #232020;
     font-size: 1.1em;
     outline: none;

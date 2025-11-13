@@ -2,33 +2,8 @@
 {% block content %}
 <div class="container mt-5 mb-5">
   <h1 style="text-align: center; color: #fff;" class="mb-4">Create New Order</h1>
-  <form method="POST" class="card" id="orderForm">
-    <div class="mb-3">
-        <label class="form-label">Order Date</label>
-        <div class="input-group" onclick="document.getElementById('order_date').showPicker()">
-            <input style="background: #fff;" type="date" id="order_date" name="order_date" class="form-control" required>
-        </div>
-    </div>
-
-    <div class="mb-3">
-      <label for="order_status" class="form-label">Order Status</label>
-      <select name="order_status" id="order_status" class="form-select">
-        <option value="Pending">Pending</option>
-        <option value="Completed">Completed</option>
-        <option value="Cancelled">Cancelled</option>
-      </select>
-    </div>
-
-    <div class="mb-3">
-      <label for="customer_id" class="form-label">Customer <span class="text-danger">*</span></label>
-      <select id="customer_id" name="customer_id" class="form-select" onchange="toggleNewCustomer()" required>
-          <option value="" disabled selected>-- Select Existing Customer --</option>
-          {% for customer in customers %}
-          <option value="{{ customer[0] }}">{{ customer[1] }}</option>
-          {% endfor %}
-      </select>
-    </div>
-
+  <form id="orderForm" class="card" method="POST" action="{{ url_for('add_order_customer') }}" class="p-4 bg-white rounded shadow-sm">
+    
     <h5 class="mt-4">Select Products</h5>
 
     <div class="menu-grid-container">
@@ -36,14 +11,8 @@
         <div class="menu-item">
           <div class="item-header">
             <img src="{{ url_for('static', filename='img/' + product[4]) }}" alt="{{ product[1] }}">
-            <button class="favorite-btn"><i class="fa-regular fa-heart"></i></button>
           </div>
           <div class="item-body">
-            <div class="rating green-stars">
-              <i class="fas fa-star"></i><i class="fas fa-star"></i>
-              <i class="fas fa-star"></i><i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
             <h3>{{ product[1] }}</h3>
             <p class="description">
               {{ product[2] }}

@@ -1,3 +1,5 @@
+from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_scss import Scss
 from flask_sqlalchemy import SQLAlchemy
@@ -72,15 +74,19 @@ def init_db():
             ])
 
         # Seed users if empty
+        admin_password = generate_password_hash('adminpass')
+        customer1_password = generate_password_hash('cust1pass')
+        customer2_password = generate_password_hash('cust2pass')
+
         c.execute('SELECT COUNT(*) FROM users')
         if c.fetchone()[0] == 0:
             c.executemany('''
                 INSERT INTO users (username, password, email, full_name, role)
                 VALUES (?, ?, ?, ?, ?)
             ''', [
-                ('admin', 'adminpass', 'admin@test.com', 'Admin User', 1),
-                ('customer1', 'cust1pass', 'juliana@test.com', 'Juliana Ritz', 2),
-                ('customer2', 'cust2pass', 'julianne@test.com', 'Julianne Curtis', 2)
+                ('admin', admin_password, 'admin@test.com', 'Admin User', 1),
+                ('customer1', customer1_password, 'juliana@test.com', 'Juliana Ritz', 2),
+                ('customer2', customer2_password, 'julianne@test.com', 'Julianne Curtis', 2)
             ])
             conn.commit()
 
@@ -103,16 +109,19 @@ def login():
 
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
-        c.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
+        c.execute("SELECT * FROM users WHERE username = ?", (username,))
         user = c.fetchone()
         conn.close()
 
-        if user:
+        if user and check_password_hash(user[2], password):
             session["user_id"] = user[0]
             session["username"] = user[1]
             session["role"] = user[5]
-            flash("Login successful!", "success")
-            return redirect(url_for("add_order"))
+
+            if session["role"] == 1:
+                return redirect(url_for("add_order"))
+            else:
+                return redirect(url_for("add_order_customer"))
         else:
             flash("Invalid username or password", "danger")
 
@@ -143,7 +152,7 @@ def register_customer():
         full_name = request.form["full_name"]
         username = request.form["username"]
         email = request.form["email"]
-        password = request.form["password"]
+        password = generate_password_hash(request.form["password"])
 
         if not full_name or not username or not password:
             flash("All fields are required!", "warning")
@@ -197,12 +206,51 @@ def view_orders():
         c.execute('''
             SELECT 
                 o.id, o.order_date, o.order_status,
-                u.name, u.email
+                u.full_name, u.email
             FROM orders o
             JOIN users u ON o.user_id = u.id
             WHERE u.role = 2
             ORDER BY o.id DESC
         ''')
+        orders = c.fetchall()
+
+        # Fetch products for each order
+        order_data = []
+        for order in orders:
+            order_id = order[0]
+            c.execute('''
+                SELECT p.name, oi.quantity, p.price
+                FROM order_items oi
+                JOIN products p ON oi.product_id = p.id
+                WHERE oi.order_id = ?
+            ''', (order_id,))
+            items = c.fetchall()
+            total = sum(q * price for (name, q, price) in items)
+            order_data.append({
+                'id': order_id,
+                'date': order[1],
+                'status': order[2],
+                'name': order[3],
+                'email': order[4],
+                'items': items,
+                'total': total
+            })
+
+    return render_template('view_orders.html', orders=order_data)
+
+@app.route('/my-orders')
+def customer_orders():
+    with sqlite3.connect(DB_NAME) as conn:
+        c = conn.cursor()
+        c.execute('''
+            SELECT 
+                o.id, o.order_date, o.order_status,
+                u.full_name, u.email
+            FROM orders o
+            JOIN users u ON o.user_id = u.id
+            WHERE u.role = 2 AND u.id = ?
+            ORDER BY o.id DESC
+        ''', (session["user_id"],))
         orders = c.fetchall()
 
         # Fetch products for each order
@@ -254,12 +302,12 @@ def add_order():
 
         order_date = request.form.get("order_date")
         order_status = request.form.get("order_status")
-        selected_products = request.form.getlist("product_id")
-        quantities = request.form.getlist("quantity")
+        selected_products = request.form.getlist("product_id[]")
+        quantities = request.form.getlist("quantity[]")
 
         # Create order
         c.execute(
-            "INSERT INTO orders (order_date, order_status, customer_id) VALUES (?, ?, ?)",
+            "INSERT INTO orders (order_date, order_status, user_id) VALUES (?, ?, ?)",
             (order_date, order_status, customer_id),
         )
         order_id = c.lastrowid
@@ -278,6 +326,43 @@ def add_order():
 
     conn.close()
     return render_template("add_order.html", products=products, customers=customers)
+
+@app.route("/add_order/customer", methods=["GET", "POST"])
+def add_order_customer():
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+
+    # Fetch products and customers
+    c.execute("SELECT * FROM products")
+    products = c.fetchall()
+
+    if request.method == "POST":
+        order_date = datetime.now()
+        order_status = 'Pending'
+        selected_products = request.form.getlist("product_id[]")
+        quantities = request.form.getlist("quantity[]")
+
+        # Create order
+        c.execute(
+            "INSERT INTO orders (order_date, order_status, user_id) VALUES (?, ?, ?)",
+            (order_date, order_status, session["user_id"]),
+        )
+        order_id = c.lastrowid
+
+        # Insert items
+        for product_id, qty in zip(selected_products, quantities):
+            if int(qty) > 0:
+                c.execute(
+                    "INSERT INTO order_items (order_id, product_id, quantity) VALUES (?, ?, ?)",
+                    (order_id, product_id, qty),
+                )
+
+        conn.commit()
+        conn.close()
+        return redirect(url_for("customer_orders"))
+
+    conn.close()
+    return render_template("add_order_customer.html", products=products)
 
 
 @app.route('/menu')

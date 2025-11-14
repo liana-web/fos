@@ -6,6 +6,26 @@
     {% else %}
         <h1 style="text-align: center; color: #fff;" class="mb-4">All Orders</h1>
     {% endif %}
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div id="flash-messages" style="max-width:800px; margin:10px auto; text-align: center;">
+            {% for category, message in messages %}
+                <div class="flash-message" style="
+                    padding:12px;
+                    margin-bottom:10px;
+                    border-radius:8px;
+                    color:white;
+                    font-weight:bold;
+                    {% if category == 'success' %} background:#28a745; {% endif %}
+                ">
+                {{ message }}
+                </div>
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
     {% if orders %}
         {% for order in orders %}
         <div class="card mb-4 shadow-sm">
@@ -15,7 +35,22 @@
                         <h5>Order #{{ order['id'] }}</h5>
                         <p class="mb-1"><strong>Customer:</strong> {{ order['name'] }} ({{ order['email'] }})</p>
                         <p class="mb-1"><strong>Date:</strong> {{ order['date'] }}</p>
-                        <p><span class="status-badge status-{{ order['status'] }}">{{ order['status'] }}</span></p>
+                         {% if session.get('role') == 1 %}
+                        <form action="/orders/update_status/{{ order['id'] }}" method="POST" style="display:flex; gap:8px; align-items:center;">
+                            <select name="order_status" style="padding:5px; border-radius:5px;">
+                                <option value="Pending"   {% if order['status'] == 'Pending' %}selected{% endif %}>Pending</option>
+                                <option value="Completed" {% if order['status'] == 'Completed' %}selected{% endif %}>Completed</option>
+                                <option value="Cancelled" {% if order['status'] == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                                <option value="Paid" {% if order['status'] == 'Paid' %}selected{% endif %}>Paid</option>
+                            </select>
+                            <button type="submit" 
+                                    style="padding:5px 10px; background:#007bff; color:white; border:none; border-radius:5px; cursor:pointer;">
+                                Update
+                            </button>
+                        </form>
+                        {% else %}
+                            <p><strong>Order Status:</strong> <span class="status-badge status-{{ order['status'] }}">{{ order['status'] }}</span></p>
+                        {% endif %}
                     </div>
                     <div class="text-end">
                         <h2>₱{{ "%.2f"|format(order.total) }}</h2>
@@ -50,4 +85,18 @@
         <div class="alert alert-info text-center">No orders found.</div>
     {% endif %}
 </div>
+<script>
+  // Wait 3 seconds then fade out flash messages
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const flashMessages = document.querySelectorAll('.flash-message');
+    flashMessages.forEach(msg => {
+      setTimeout(() => {
+        msg.style.transition = "opacity 0.8s";
+        msg.style.opacity = 0;
+        // Remove from DOM after fade
+        setTimeout(() => msg.remove(), 800);
+      }, 2000); // 3 seconds delay
+    });
+  });
+</script>
 {% endblock %}

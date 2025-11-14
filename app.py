@@ -168,7 +168,7 @@ def edit_product(id):
                 filename = secure_filename(file.filename)
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 file.save(file_path)
-                image_url = f"static/img/{filename}"
+                image_url = filename
             else:
                 return "Invalid file type", 400
         else:
@@ -424,9 +424,26 @@ def add_order_customer():
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
 
+    # Handle product filters
+    search_name = request.args.get('search_name', '').strip()
+    min_price = request.args.get('min_price', '')
+    max_price = request.args.get('max_price', '')
+
+    query = "SELECT * FROM products WHERE 1=1"
+    params = []
+
+    if search_name:
+        query += " AND name LIKE ?"
+        params.append(f"%{search_name}%")
+    if min_price:
+        query += " AND price >= ?"
+        params.append(min_price)
+    if max_price:
+        query += " AND price <= ?"
+        params.append(max_price)
+
     # Fetch products and customers
-    c.execute("SELECT * FROM products")
-    products = c.fetchall()
+    products = c.execute(query, params).fetchall()
 
     if request.method == "POST":
         order_date = datetime.now()
@@ -454,7 +471,31 @@ def add_order_customer():
         return redirect(url_for("customer_orders"))
 
     conn.close()
-    return render_template("add_order_customer.html", products=products)
+    # return render_template("add_order_customer.html", products=products)
+    return render_template(
+        "add_order_customer.html",
+        products=products,
+        search_name=search_name,
+        min_price=min_price,
+        max_price=max_price
+    )
+
+@app.route('/orders/update_status/<int:order_id>', methods=['POST'])
+def update_order_status(order_id):
+    new_status = request.form['order_status']
+
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    c.execute("""
+        UPDATE orders SET order_status = ?
+        WHERE id = ?
+    """, (new_status, order_id))
+    conn.commit()
+    conn.close()
+
+    flash("Order status successfully updated!", "success")
+
+    return redirect('/orders')
 
 
 @app.route('/menu')

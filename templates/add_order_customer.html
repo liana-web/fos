@@ -2,9 +2,35 @@
 {% block content %}
 <div class="container mt-5 mb-5">
   <h1 style="text-align: center; color: #fff;" class="mb-4">Create New Order</h1>
+
+  <div style="max-width:800px; margin:20px auto; display:flex; gap:10px; flex-wrap:wrap;">
+    <form method="GET" style="display:flex; gap:10px; flex-wrap:wrap; width:100%;">
+        <input type="text" name="search_name" placeholder="Search by name"
+              value="{{ search_name }}"
+              style="padding:8px; border-radius:5px; border:1px solid #ccc; flex:1; min-width:150px;">
+
+        <input type="number" name="min_price" placeholder="Min price"
+              value="{{ min_price }}"
+              style="padding:8px; border-radius:5px; border:1px solid #ccc; width:100px;">
+
+        <input type="number" name="max_price" placeholder="Max price"
+              value="{{ max_price }}"
+              style="padding:8px; border-radius:5px; border:1px solid #ccc; width:100px;">
+
+        <button type="submit" style="padding:8px 12px; background:#007bff; color:white; border:none; border-radius:5px;">
+            Filter
+        </button>
+
+        <a href="{{ url_for('add_order_customer') }}"
+          style="padding:8px 12px; background:#6c757d; color:white; border-radius:5px; text-decoration:none;">
+          Reset
+        </a>
+    </form>
+  </div>
+
   <form id="orderForm" class="card" method="POST" action="{{ url_for('add_order_customer') }}" class="p-4 bg-white rounded shadow-sm">
     
-    <h5 class="mt-4">Select Products</h5>
+    <h3 class="mt-4" style="text-align: center;">Select Products</h3>
 
     <div class="menu-grid-container">
       {% for product in products %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card" style="max-width: 500px; margin: 40px auto;">
+  <h2 style="text-align:center; margin-bottom:20px;">Add New Product</h2>
+
+  <form method="POST" enctype="multipart/form-data">
+
+      <label>Name</label>
+      <input type="text" name="name" required
+              placeholder="Product name"
+              style="width:100%; padding:10px; margin-bottom:15px; border-radius:8px; border:1px solid #ccc;">
+
+      <label>Description</label>
+      <textarea name="description" required
+                placeholder="Product description"
+                style="width:100%; padding:10px; margin-bottom:15px; border-radius:8px; border:1px solid #ccc; height:100px;"></textarea>
+
+      <label>Price</label>
+      <input type="number" name="price" step="0.01" required
+              placeholder="0.00"
+              style="width:100%; padding:10px; margin-bottom:15px; border-radius:8px; border:1px solid #ccc;">
+
+      <label>Product Image</label>
+      <input type="file" name="image_file" required
+              accept="image/*"
+              style="width:100%; padding:10px; margin-bottom:15px; border-radius:8px; border:1px solid #ccc;">
+
+      <button type="submit"
+              style="
+                  width:100%;
+                  background:#007bff;
+                  color:white;
+                  border:none;
+                  padding:12px;
+                  border-radius:8px;
+                  cursor:pointer;
+                  font-size:16px;
+              ">
+          Add Product
+      </button>
+  </form>
+</div>
+{% endblock %}

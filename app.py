@@ -1,13 +1,20 @@
+import os
+import sqlite3
 from datetime import datetime
+from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_scss import Scss
 from flask_sqlalchemy import SQLAlchemy
-import sqlite3
 
 app = Flask (__name__)
 app.secret_key = 'liana1234' # required for flashing messages
+
 DB_NAME = 'fos.db'
+UPLOAD_FOLDER = 'static/img'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def init_db():
     with sqlite3.connect(DB_NAME) as conn:
@@ -90,12 +97,97 @@ def init_db():
             ])
             conn.commit()
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def get_products():
-    with sqlite3.connect(DB_NAME) as conn:
+@app.route('/products/new', methods=['GET', 'POST'])
+def add_product():
+    if request.method == 'POST':
+        name = request.form['name']
+        description = request.form['description']
+        price = request.form['price']
+
+        file = request.files['image_file']
+
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
+
+            # store path for db
+            image_url = filename
+        else:
+            return "Invalid file type", 400
+
+        conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
-        c.execute('SELECT id, name, price, image_url FROM products')
-        return c.fetchall()
+        c.execute("""
+            INSERT INTO products (name, description, price, image_url)
+            VALUES (?, ?, ?, ?)
+        """, (name, description, price, image_url))
+        conn.commit()
+        conn.close()
+
+        return redirect('/products/list')
+
+    return render_template('add_product.html')
+
+@app.route('/products/list')
+def product_list():
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    products = c.execute("SELECT * FROM products").fetchall()
+    conn.close()
+    return render_template("product_list.html", products=products)
+
+@app.route('/products/delete/<int:id>')
+def delete_product(id):
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    c.execute("DELETE FROM products WHERE id = ?", (id,))
+    conn.commit()
+    conn.close()
+    return redirect('/products/list')
+
+@app.route('/products/edit/<int:id>', methods=['GET', 'POST'])
+def edit_product(id):
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    product = c.execute("SELECT * FROM products WHERE id = ?", (id,)).fetchone()
+
+    if request.method == 'POST':
+        name = request.form['name']
+        description = request.form['description']
+        price = request.form['price']
+
+        # Check if new image uploaded
+        file = request.files['image_file']
+        if file and file.filename != '':
+            if allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                file.save(file_path)
+                image_url = f"static/img/{filename}"
+            else:
+                return "Invalid file type", 400
+        else:
+            # keep old image
+            image_url = product[4]
+
+        conn.execute("""
+            UPDATE products 
+            SET name = ?, description = ?, price = ?, image_url = ?
+            WHERE id = ?
+        """, (name, description, price, image_url, id))
+        conn.commit()
+        conn.close()
+
+        return redirect('/products/list')
+
+    conn.close()
+    return render_template("edit_product.html", product=product)
+
 
 @app.route("/")
 def index():

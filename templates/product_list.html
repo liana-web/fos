@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 style="text-align:center; margin-top:20px;">Product List</h2>
+
+<div style="
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+">
+    {% for p in products %}
+    <div style="
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        overflow: hidden;
+        text-align: center;
+        padding-bottom: 15px;
+    ">
+        <img src="{{ url_for('static', filename='img/' + p[4].split('/')[-1]) }}"
+             style="width:100%; height:180px; object-fit:cover;">
+
+        <h3 style="margin: 10px 0 5px;">{{ p[1] }}</h3>
+
+        <p style="padding: 0 10px; min-height: 50px; font-size: 14px; color:#555;">
+            {{ p[2] }}
+        </p>
+
+        <p style="font-weight:bold; font-size:16px; color:#007bff;">
+            ₱ {{ "%.2f"|format(p[3]) }}
+        </p>
+
+        <div style="margin-top:10px;">
+            <a href="/products/edit/{{ p[0] }}"
+               style="padding:8px 12px; background:#ffc107; color:white; border-radius:8px; text-decoration:none; margin-right:5px;">
+                Edit
+            </a>
+
+            <a href="/products/delete/{{ p[0] }}"
+               style="padding:8px 12px; background:#dc3545; color:white; border-radius:8px; text-decoration:none;"
+               onclick="return confirm('Delete this product?');">
+                Delete
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

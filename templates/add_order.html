@@ -24,7 +24,7 @@
       <select id="customer_id" name="customer_id" class="form-select" onchange="toggleNewCustomer()" required>
           <option value="" disabled selected>-- Select Existing Customer --</option>
           {% for customer in customers %}
-          <option value="{{ customer[0] }}">{{ customer[1] }}</option>
+          <option value="{{ customer[0] }}">{{ customer[3] }}</option>
           {% endfor %}
       </select>
     </div>
